@@ -1,190 +1,135 @@
-# 🚀 Quantum Financial Suite
+# 🛸 Quantum Financial Suite | SpaceX & NASA Telemetry Engine
 
-> **A suíte de inteligência financeira e visualização de dados de ultra-baixa fricção mais avançada e futurista do mundo.**
+> **Copiloto Financeiro Pessoal de Ultra-Baixa Fricção com Telemetria Visual estilo NASA/SpaceX, Captura Multimodal (Voz, OCR, QR Code, Boletos) e Integração Open Finance.**
 
-Projetada para quem tem uma rotina extremamente corrida e não tem tempo para preencher planilhas manuais. Transforme registros do dia a dia em estratégias de multiplicação patrimonial e gráficos futuristas com visual *Cyberpunk/SpaceX*.
-
----
-
-## 🌌 Recursos Principais
-
-- ⚡ **Registro em 30 Segundos:** Digite frases desestruturadas ("Gastei 45 no almoço e 12 no Uber") e deixe o copiloto categorizar tudo automaticamente.
-- 🛡️ **Método Quantum-Split:** Distribuição inteligente em 4 Vetores (Sobrevivência, Aceleração, Futuro e Expansão do Presente).
-- 📊 **Dashboards Futuristas (Dark/Neon):** Geração de planilhas Excel avançadas (`.xlsx`) com KPIs, formatação condicional e gráficos de juros compostos.
-- 🎯 **Simulador de Compra Impulsiva:** Calcule o custo de compras em horas de trabalho e o impacto no patrimônio acumulado em 1, 5 e 10 anos.
-- 📈 **Piloto Automático de Investimentos:** Estruturação desde a Reserva de Emergência até Ativos Globais e FIIs.
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 ---
 
-## 📦 Estrutura do Projeto
+## 🌌 Visão Geral & Cockpit de Telemetria
 
-```
-quantum-financial-suite/
-├── .antigravityrules              # Configuração do workspace (ativa as skills)
-├── README.md                      # Este arquivo
-├── agents.md                      # Regras base do agente financeiro
-└── skills/
-    ├── quantum-financial-copilot/
-    │   └── SKILL.md               # Skill do copiloto financeiro inteligente
-    └── quantum-excel-generator/
-        └── SKILL.md               # Skill do gerador de planilhas futuristas
+O **Quantum Financial Suite** transforma o gerenciamento financeiro em uma rotina de no máximo **30 segundos diários**. Em vez de tabelas e planilhas cansativas, a aplicação fornece um **HUD (Heads-Up Display)** em tempo real com estética *Cyberpunk / SpaceX*:
+
+```text
+================================================================================
+🛸 QUANTUM MISSION CONTROL | TELEMETRIA PATRIMONIAL EM TEMPO REAL
+================================================================================
+[ STATUS DO MÊS ]  [████████████░░░░░░░░] 60% Consumido | Teto de Segurança OK
+[ VALOR DA HORA ] R$ 100,00/h | Custo Diário de Sobrevivência: R$ 133,33
+[ RELÓGIO FIRE ]   Liberdade Financeira Projetada: 7 anos e 4 meses
+================================================================================
+🛡️ SOBREVIVÊNCIA : R$ 3.000 / R$ 5.000 (60%) [DENTRO DO LIMITE]
+⚡ ACELERAÇÃO    : R$ 1.500 / R$ 2.000 (75%) [ALOCAÇÃO: Tesouro IPCA / FIIs]
+🚀 VETOR FUTURO  : R$   800 / R$ 1.000 (80%) [META PROJETO: 80%]
+🎮 LAZER LIVRE   : R$   700 / R$ 1.000 (70%) [SALDO DISPONÍVEL: R$ 300]
+================================================================================
 ```
 
 ---
 
-## 🛠️ Como Instalar e Usar no VS Code (Antigravity)
+## 🚀 Módulos e Tecnologias Principais
+
+### 1. 🎙️ Comando de Voz Hands-Free (Web Speech API)
+- Captura de áudio nativa no browser para uso veloz ou acessibilidade motora/visual.
+- Processador semântico de linguagem natural em português:
+  * Exemplo: *"Gastei 45 no almoço, 12 no Uber e 2500 de aluguel"* ➔ extração instantânea com valor, categoria e alocação automática no vetor correspondente.
+
+### 2. 📸 Visão Computacional & OCR de Cupons Fiscais (NFC-e)
+- Leitura de QR Codes de NFC-e (Nota Fiscal de Consumidor Eletrônica) emitidas pela SEFAZ.
+- Extração de itens comprados, estabelecimento, valor total e impostos.
+- Decodificador de código de barras e linhas digitáveis de Boletos Bancários (44 a 48 dígitos).
+
+### 3. 🏦 Conector Open Finance & Conciliação de Extratos
+- Protocolo simulado de conexão com agregadores de Open Finance (**Pluggy / Belvo**) para sincronização com Nubank, Itaú, BTG, XP, Inter e Bradesco.
+- Importador de arquivos de extrato **.OFX, .CSV e .JSON** com reconciliação bancária automática.
+
+### 4. 🧬 O Método Quantum-Split (4 Vetores)
+- 🛡️ **Sobrevivência (50% a 60%):** Despesas essenciais (aluguel, mercado, luz, saúde). Teto rígido com telemetria de burnrate diário.
+- ⚡ **Aceleração FIRE (mínimo 20%):** Motor de liberdade financeira (Tesouro Selic/IPCA, FIIs, Ações globais).
+- 🚀 **Vetor Futuro (10% a 15%):** Metas de médio prazo, especializações, upgrades e viagens.
+- 🎮 **Lazer Livre (10% a 15%):** Lazer sem culpa para manter a qualidade de vida.
+
+### 5. ⏱️ Relógio FIRE & Simulador de Compra Impulsiva
+- **Relógio FIRE:** Cálculo atuarial contínuo com base na regra dos 4% (25x despesas anuais) e projeções exponenciais de juros compostos.
+- **Compra Impulsiva:** *"Vale a pena comprar X por R$ Y?"* ➔ Converte o valor em **horas de trabalho** necessárias para pagar o item e simula quanto esse montante renderia em **1, 5 e 10 anos** se aportado no Vetor Aceleração.
+
+---
+
+## 🛠️ Como Executar Localmente
 
 ### Pré-requisitos
+- **Node.js 18+** instalado.
+- **npm** ou **yarn**.
 
-- [VS Code](https://code.visualstudio.com/) instalado
-- Extensão **Antigravity** (ou Gemini Code Assist) ativa
-- [Git](https://git-scm.com/) instalado
-- [Python 3.8+](https://www.python.org/) (para o gerador de planilhas)
-
-### 1. Clone o repositório
-
+### 1. Clonar o Repositório
 ```bash
 git clone https://github.com/LuidiSilva05/Desafio_skill.git
 cd Desafio_skill
 ```
 
-### 2. Abra no VS Code
-
+### 2. Instalar Dependências
 ```bash
-code .
+npm install
 ```
 
-### 3. Ative as Skills
-
-As skills são ativadas automaticamente pelo arquivo `.antigravityrules`. Ao abrir o workspace, o Antigravity reconhece e carrega:
-
-- **quantum-financial-copilot** → Copiloto financeiro inteligente
-- **quantum-excel-generator** → Gerador de dashboards Excel
-
-### 4. Instale as dependências Python (para planilhas)
-
+### 3. Iniciar o Servidor de Desenvolvimento
 ```bash
-pip install openpyxl
+npm run dev
+```
+
+Acesse [http://localhost:3000](http://localhost:3000) no seu navegador.
+
+### 4. Compilar para Produção
+```bash
+npm run build
+npm run start
 ```
 
 ---
 
-## 🚀 Guia de Uso Rápido
-
-### 💬 Registrando Gastos (30 segundos!)
-
-Basta digitar no chat do Antigravity:
+## 📁 Estrutura do Projeto
 
 ```
-Gastei 45 no almoço, 12 no Uber e paguei 1500 de aluguel
+quantum-financial-suite/
+├── src/
+│   ├── app/
+│   │   ├── globals.css             # Estilos Cyberpunk, Scanlines e Grid SpaceX
+│   │   ├── layout.tsx              # Root Layout com fontes e Provider
+│   │   ├── page.tsx                # Dashboard Principal de Telemetria
+│   │   └── settings/
+│   │       └── page.tsx            # Calibração 100% Customizável campo por campo
+│   ├── components/
+│   │   ├── HeaderHUD.tsx           # Barra superior com relógio UTC e atalhos
+│   │   ├── TelemetryGauges.tsx     # Medidores de status, hora de vida e burnrate
+│   │   ├── VectorsProgress.tsx     # Barras dinâmicas do Quantum-Split
+│   │   ├── FireClock.tsx           # Contagem regressiva FIRE e juros compostos
+│   │   ├── VoiceCommander.tsx      # Web Speech API hands-free
+│   │   ├── ScannerModal.tsx        # Câmera QR Code, Boleto e OCR NFC-e
+│   │   ├── OpenFinanceModal.tsx    # APIs bancárias e importador OFX/CSV
+│   │   ├── ImpulseCalculator.tsx   # Simulador de decisão de compra
+│   │   ├── LeakDetector.tsx        # Detecção de assinaturas e microvazamentos
+│   │   └── TransactionList.tsx     # Feed de transações e input 30s
+│   ├── context/
+│   │   └── FinancialContext.tsx    # Estado global e persistência LocalStorage
+│   └── types/
+│       └── financial.ts            # Tipagens TypeScript completas
+├── skills/                         # Antigravity Skills integradas
+├── .antigravityrules               # Diretrizes do Copiloto no Workspace
+├── package.json
+├── tailwind.config.ts
+└── tsconfig.json
 ```
-
-O copiloto vai:
-1. ✅ Extrair cada transação
-2. ✅ Classificar nos 4 vetores
-3. ✅ Atualizar seu balanço mensal
-4. ✅ Detectar possíveis vazamentos
-
-### 🎯 Simulando Compra Impulsiva
-
-```
-Vale a pena comprar um iPhone por R$ 5.500?
-```
-
-Resposta inclui: horas de trabalho, rendimento projetado em 1/5/10 anos e recomendação neutra.
-
-### 📊 Gerando Dashboard Excel
-
-```
-Gera a planilha do mês
-```
-
-Cria um arquivo `.xlsx` com visual dark/neon contendo:
-- Dashboard com KPIs
-- Lista de transações com formatação condicional
-- Projeção patrimonial com gráfico de juros compostos
-- Diagnóstico de vazamentos
-
-### 📈 Piloto Automático de Investimentos
-
-```
-Monta meu piloto automático de investimentos
-```
-
-Estrutura em 3 fases:
-| Fase | Objetivo | Ativos |
-|------|----------|--------|
-| 1️⃣ Escudo | Reserva de emergência (3-6 meses) | Tesouro Selic, CDB |
-| 2️⃣ Motor | Multiplicação patrimonial | IPCA+, FIIs, Dividendos |
-| 3️⃣ Expansão | Diversificação global | ETFs, BDRs, Fundos Globais |
 
 ---
 
-## 🧬 O Método Quantum-Split
-
-A alocação financeira é organizada em **4 vetores**:
-
-| Vetor | Emoji | Foco | % da Renda |
-|-------|-------|------|------------|
-| Sobrevivência | 🛡️ | Contas fixas e essenciais | 50-60% |
-| Aceleração | ⚡ | Investimentos e crescimento | Mín. 20% |
-| Futuro | 🚀 | Projetos pessoais | 10-15% |
-| Expansão do Presente | 🎮 | Lazer sem culpa | 10-15% |
+## 🔒 Privacidade e Criptografia
+- Todos os dados financeiros são armazenados localmente no navegador via `localStorage`.
+- Nenhuma informação privada é transmitida para servidores de terceiros.
 
 ---
 
-## 🎨 Visual dos Dashboards
-
-Os dashboards Excel seguem o **Quantum Dark Theme**:
-
-- 🖤 Fundo escuro (`#0D0D0D`)
-- 💠 Acentos ciano neon (`#00F5FF`)
-- 💚 Indicadores positivos verde (`#39FF14`)
-- 💗 Alertas magenta (`#FF006E`)
-- 💛 Avisos dourado (`#FFD700`)
-
-Inspirado em painéis de controle de naves espaciais — porque suas finanças merecem um cockpit de elite.
-
----
-
-## 🔒 Privacidade
-
-- 🔐 Todos os dados ficam **locais no seu computador**
-- ☁️ Nenhuma informação financeira é enviada para servidores externos
-- 📁 As planilhas são salvas no seu workspace
-
----
-
-## ⚠️ Disclaimer
-
-> As sugestões e simulações fornecidas por esta suíte são **puramente educativas** e não constituem recomendação de investimento. Para decisões financeiras de maior porte, consulte um profissional certificado (CEA/CFP).
-
----
-
-## 🤝 Contribuindo
-
-1. Faça um fork do projeto
-2. Crie sua branch (`git checkout -b feature/minha-feature`)
-3. Commit suas mudanças (`git commit -m 'feat: adiciona minha feature'`)
-4. Push para a branch (`git push origin feature/minha-feature`)
-5. Abra um Pull Request
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
-## 👤 Autor
-
-**Luidi Silva** — [@LuidiSilva05](https://github.com/LuidiSilva05)
-
----
-
-<p align="center">
-  <strong>🚀 Quantum Financial Suite</strong><br>
-  <em>Dados financeiros nunca foram tão poderosos — nem tão bonitos.</em>
-</p>
-
+## ⚠️ Ressalva Legal
+> As projeções matemáticas, simulações e diagnósticos apresentados nesta suíte têm finalidade estritamente educativa e de auxílio à organização financeira pessoal, não constituindo recomendação de investimento. Decisões de investimento de maior porte merecem a avaliação de um profissional certificado (CEA/CFP).

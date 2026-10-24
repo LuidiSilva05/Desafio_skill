@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚡ Quantum Financial Copilot</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #050510;
+      --bg-secondary: #0a0a1a;
+      --bg-card: #0d1025;
+      --bg-card-hover: #111535;
+      --cyan: #00f5ff;
+      --cyan-dim: #00f5ff44;
+      --magenta: #ff006e;
+      --magenta-dim: #ff006e44;
+      --green: #39ff14;
+      --green-dim: #39ff1444;
+      --gold: #ffd700;
+      --gold-dim: #ffd70044;
+      --purple: #bf5af2;
+      --purple-dim: #bf5af244;
+      --text: #e0e8ff;
+      --text-dim: #6878a0;
+      --border: #1a2040;
+      --glass: rgba(13, 16, 37, 0.85);
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ========== ANIMATED BACKGROUND ========== */
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .grid-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: 1;
+      pointer-events: none;
+      animation: gridPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes gridPulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+
+    .glow-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      animation: orbFloat 8s ease-in-out infinite;
+    }
+
+    .glow-orb.cyan { background: var(--cyan-dim); width: 400px; height: 400px; top: 10%; left: 5%; }
+    .glow-orb.magenta { background: var(--magenta-dim); width: 350px; height: 350px; top: 50%; right: 5%; animation-delay: -3s; }
+    .glow-orb.purple { background: var(--purple-dim); width: 300px; height: 300px; bottom: 10%; left: 40%; animation-delay: -5s; }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -20px) scale(1.1); }
+      66% { transform: translate(-20px, 30px) scale(0.9); }
+    }
+
+    /* ========== MAIN LAYOUT ========== */
+    .app-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* ========== HEADER ========== */
+    .header {
+      text-align: center;
+      padding: 30px 0 20px;
+      position: relative;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--cyan), var(--purple), var(--magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      animation: titleGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes titleGlow {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.3); }
+    }
+
+    .header .subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      margin-top: 8px;
+      letter-spacing: 2px;
+    }
+
+    .header .status-bar {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 15px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .status-bar .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 5px;
+      animation: blink 2s ease-in-out infinite;
+    }
+    .dot.online { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ========== QUICK INPUT ========== */
+    .quick-input-section {
+      margin: 25px 0;
+    }
+
+    .input-wrapper {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 4px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 0 0 var(--cyan-dim);
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--cyan);
+      box-shadow: 0 0 30px var(--cyan-dim), inset 0 0 30px rgba(0,245,255,0.03);
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .input-icon {
+      padding: 12px 5px 12px 18px;
+      font-size: 1.4rem;
+      opacity: 0.6;
+    }
+
+    #mainInput {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem;
+      padding: 15px 0;
+      font-weight: 500;
+    }
+
+    #mainInput::placeholder {
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    .btn-send {
+      background: linear-gradient(135deg, var(--cyan), #0088ff);
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      color: #000;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      margin-right: 4px;
+    }
+
+    .btn-send:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px var(--cyan-dim);
+    }
+
+    .input-hints {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hint-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .hint-chip:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      background: rgba(0,245,255,0.05);
+    }
+
+    /* ========== CONFIG PANEL ========== */
+    .config-panel {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 25px;
+      display: none;
+    }
+
+    .config-panel.visible { display: block; }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .config-field label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .config-field input {
+      width: 100%;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .config-field input:focus {
+      border-color: var(--cyan);
+    }
+
+    .btn-config {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 16px;
+      color: var(--text-dim);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 15px;
+    }
+
+    .btn-config:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    /* ========== KPI CARDS ========== */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .kpi-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .kpi-card.cyan::before { background: linear-gradient(90deg, var(--cyan), transparent); }
+    .kpi-card.green::before { background: linear-gradient(90deg, var(--green), transparent); }
+    .kpi-card.magenta::before { background: linear-gradient(90deg, var(--magenta), transparent); }
+    .kpi-card.gold::before { background: linear-gradient(90deg, var(--gold), transparent); }
+    .kpi-card.purple::before { background: linear-gradient(90deg, var(--purple), transparent); }
+
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--cyan);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+
+    .kpi-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .kpi-value.positive { color: var(--green); }
+    .kpi-value.negative { color: var(--magenta); }
+    .kpi-value.neutral { color: var(--cyan); }
+    .kpi-value.accent { color: var(--gold); }
+
+    .kpi-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-top: 6px;
+    }
+
+    /* ========== VECTOR SECTION ========== */
+    .vectors-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .vector-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .vector-card:hover {
+      border-color: var(--cyan);
+    }
+
+    .vector-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .vector-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .vector-pct {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .vector-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-primary);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .vector-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 1s ease;
+      position: relative;
+    }
+
+    .vector-bar-fill::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 0;
+      width: 20px; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+      animation: barShimmer 2s ease-in-out infinite;
+    }
+
+    @keyframes barShimmer {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    .vector-values {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    /* ========== TRANSACTIONS TABLE ========== */
+    .section-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--cyan);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title .line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--cyan-dim), transparent);
+    }
+
+    .transactions-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .transactions-table th {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .transactions-table td {
+      padding: 12px;
+      font-size: 0.92rem;
+      border-bottom: 1px solid rgba(26,32,64,0.5);
+      vertical-align: middle;
+    }
+
+    .transactions-table tr {
+      transition: background 0.2s;
+    }
+
+    .transactions-table tbody tr:hover {
+      background: rgba(0,245,255,0.03);
+    }
+
+    .tx-amount {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .tx-amount.low { color: var(--green); }
+    .tx-amount.mid { color: var(--gold); }
+    .tx-amount.high { color: var(--magenta); }
+
+    .tx-vector {
+      font-size: 0.8rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .tx-vector.sobrev { background: var(--cyan-dim); color: var(--cyan); }
+    .tx-vector.aceler { background: var(--green-dim); color: var(--green); }
+    .tx-vector.futuro { background: var(--purple-dim); color: var(--purple); }
+    .tx-vector.expans { background: var(--gold-dim); color: var(--gold); }
+
+    .tx-delete {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      transition: all 0.2s;
+    }
+    .tx-delete:hover {
+      border-color: var(--magenta);
+      color: var(--magenta);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-dim);
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .empty-state .icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      opacity: 0.3;
+    }
+
+    /* ========== IMPULSE SIMULATOR ========== */
+    .impulse-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    @media (max-width: 768px) {
+      .impulse-section { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .vectors-section { grid-template-columns: 1fr; }
+      .header h1 { font-size: 1.4rem; }
+    }
+
+    .impulse-input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .impulse-input-group input {
+      flex: 1;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .impulse-input-group input:focus {
+      border-color: var(--gold);
+    }
+
+    .btn-simulate {
+      background: linear-gradient(135deg, var(--gold), #ff8800);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      color: #000;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+
+    .btn-simulate:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px var(--gold-dim);
+    }
+
+    .sim-result {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .sim-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .sim-card .sim-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .sim-card .sim-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    /* ========== PROJECTION CHART ========== */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      margin-top: 15px;
+    }
+
+    /* ========== TOAST ========== */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--cyan);
+      border-radius: 12px;
+      padding: 14px 20px;
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.9rem;
+      box-shadow: 0 0 30px var(--cyan-dim);
+      animation: toastIn 0.4s ease, toastOut 0.4s ease 3s forwards;
+      max-width: 350px;
+    }
+
+    @keyframes toastIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes toastOut {
+      from { opacity: 1; }
+      to { opacity: 0; transform: translateY(-20px); }
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      text-align: center;
+      padding: 30px 0;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    .footer a { color: var(--cyan); text-decoration: none; }
+
+    /* ========== SCAN LINE ========== */
+    .scanline {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      z-index: 100;
+      pointer-events: none;
+      animation: scanDown 6s linear infinite;
+      opacity: 0.15;
+    }
+
+    @keyframes scanDown {
+      0% { top: -2px; }
+      100% { top: 100%; }
+    }
+
+    /* ========== NAV TABS ========== */
+    .nav-tabs {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4px;
+      overflow-x: auto;
+    }
+
+    .nav-tab {
+      flex: 1;
+      min-width: fit-content;
+      padding: 10px 16px;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      color: var(--text-dim);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .nav-tab:hover { color: var(--text); }
+
+    .nav-tab.active {
+      background: linear-gradient(135deg, rgba(0,245,255,0.15), rgba(0,245,255,0.05));
+      color: var(--cyan);
+      box-shadow: 0 0 15px var(--cyan-dim);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ========== RESPONSIVE TWEAKS ========== */
+    @media (max-width: 600px) {
+      .app-container { padding: 10px; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .impulse-section { grid-template-columns: 1fr; }
+      .sim-result { grid-template-columns: 1fr; }
+      .nav-tab { font-size: 0.6rem; padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Effects -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="grid-overlay"></div>
+  <div class="glow-orb cyan"></div>
+  <div class="glow-orb magenta"></div>
+  <div class="glow-orb purple"></div>
+  <div class="scanline"></div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="app-container">
+
+    <!-- HEADER -->
+    <header class="header">
+      <h1>⚡ Quantum Financial</h1>
+      <div class="subtitle">COPILOTO FINANCEIRO DE ULTRA-BAIXA FRICÇÃO</div>
+      <div class="status-bar">
+        <span><span class="dot online"></span>SISTEMA ONLINE</span>
+        <span>v2.0.0</span>
+        <span id="currentDate"></span>
+      </div>
+    </header>
+
+    <!-- CONFIG TOGGLE -->
+    <button class="btn-config" onclick="toggleConfig()">⚙️ CONFIGURAR RENDA E VETORES</button>
+
+    <!-- CONFIG PANEL -->
+    <div class="config-panel" id="configPanel">
+      <div class="config-grid">
+        <div class="config-field">
+          <label>💰 Renda Mensal (R$)</label>
+          <input type="number" id="inputRenda" value="5000" onchange="updateConfig()">
+        </div>
+        <div class="config-field">
+          <label>🛡️ Sobrevivência (%)</label>
+          <input type="number" id="inputSobrev" value="55" min="0" max="100" onchange="updateConfig()">
+        </div>
+        <div class="config-field">
+          <label>⚡ Aceleração (%)</label>
+          <input type="number" id="inputAceler" value="20" min="0" max="100" onchange="updateConfig()">
+        </div>
+        <div class="config-field">
+          <label>🚀 Futuro (%)</label>
+          <input type="number" id="inputFuturo" value="10" min="0" max="100" onchange="updateConfig()">
+        </div>
+        <div class="config-field">
+          <label>🎮 Expansão (%)</label>
+          <input type="number" id="inputExpans" value="15" min="0" max="100" onchange="updateConfig()">
+        </div>
+        <div class="config-field">
+          <label>📈 Taxa Anual Investimento (%)</label>
+          <input type="number" id="inputTaxa" value="12" min="0" max="100" step="0.5" onchange="updateConfig()">
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK INPUT -->
+    <div class="quick-input-section">
+      <div class="input-wrapper">
+        <div class="input-row">
+          <div class="input-icon">⚡</div>
+          <input type="text" id="mainInput" placeholder='Digite seus gastos: "45 almoço, 12 uber, 1500 aluguel"' onkeypress="if(event.key==='Enter')processInput()">
+          <button class="btn-send" onclick="processInput()">REGISTRAR</button>
+        </div>
+      </div>
+      <div class="input-hints">
+        <span class="hint-chip" onclick="fillExample('45 almoço e 12 uber')">💬 "45 almoço e 12 uber"</span>
+        <span class="hint-chip" onclick="fillExample('1500 aluguel pix')">🏠 "1500 aluguel pix"</span>
+        <span class="hint-chip" onclick="fillExample('55.90 netflix cartão')">🎬 "55.90 netflix cartão"</span>
+        <span class="hint-chip" onclick="fillExample('297 curso udemy')">📚 "297 curso udemy"</span>
+        <span class="hint-chip" onclick="fillExample('250 gasolina')">⛽ "250 gasolina"</span>
+      </div>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="kpi-grid">
+      <div class="kpi-card cyan">
+        <div class="kpi-label">💰 Renda Mensal</div>
+        <div class="kpi-value neutral" id="kpiRenda">R$ 5.000</div>
+        <div class="kpi-sub">Base de cálculo</div>
+      </div>
+      <div class="kpi-card magenta">
+        <div class="kpi-label">📉 Gastos Totais</div>
+        <div class="kpi-value negative" id="kpiGastos">R$ 0</div>
+        <div class="kpi-sub" id="kpiGastosPct">0% da renda</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">💎 Sobra Líquida</div>
+        <div class="kpi-value positive" id="kpiSobra">R$ 5.000</div>
+        <div class="kpi-sub" id="kpiSobraPct">100% livre</div>
+      </div>
+      <div class="kpi-card gold">
+        <div class="kpi-label">📊 Transações</div>
+        <div class="kpi-value accent" id="kpiTx">0</div>
+        <div class="kpi-sub">este mês</div>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-label">⏱️ Dias Restantes</div>
+        <div class="kpi-value" id="kpiDias" style="color: var(--purple)">0</div>
+        <div class="kpi-sub">até fechar o mês</div>
+      </div>
+    </div>
+
+    <!-- NAV TABS -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchTab('vectors')">🧬 Quantum-Split</button>
+      <button class="nav-tab" onclick="switchTab('transactions')">📋 Transações</button>
+      <button class="nav-tab" onclick="switchTab('simulator')">🎯 Simulador</button>
+      <button class="nav-tab" onclick="switchTab('projection')">📈 Projeção</button>
+      <button class="nav-tab" onclick="switchTab('leaks')">🔍 Vazamentos</button>
+    </div>
+
+    <!-- TAB: VECTORS -->
+    <div class="tab-content active" id="tab-vectors">
+      <div class="vectors-section">
+        <div class="vector-card" id="vecSobrev">
+          <div class="vector-header">
+            <span class="vector-name" style="color: var(--cyan)">🛡️ SOBREVIVÊNCIA</span>
+            <span class="vector-pct" id="vecSobrevPct" style="color: var(--cyan)">0%</span>
+          </div>
+          <div class="vector-bar-bg">
+            <div class="vector-bar-fill" id="vecSobrevBar" style="width:0%; background: linear-gradient(90deg, var(--cyan), #0088ff);"></div>
+          </div>
+          <div class="vector-values">
+            <span id="vecSobrevSpent">R$ 0</span>
+            <span id="vecSobrevLimit">/ R$ 2.750</span>
+          </div>
+        </div>
+        <div class="vector-card" id="vecAceler">
+          <div class="vector-header">
+            <span class="vector-name" style="color: var(--green)">⚡ ACELERAÇÃO</span>
+            <span class="vector-pct" id="vecAccelPct" style="color: var(--green)">0%</span>
+          </div>
+          <div class="vector-bar-bg">
+            <div class="vector-bar-fill" id="vecAccelBar" style="width:0%; background: linear-gradient(90deg, var(--green), #00cc44);"></div>
+          </div>
+          <div class="vector-values">
+            <span id="vecAccelSpent">R$ 0</span>
+            <span id="vecAccelLimit">/ R$ 1.000</span>
+          </div>
+        </div>
+        <div class="vector-card" id="vecFuturo">
+          <div class="vector-header">
+            <span class="vector-name" style="color: var(--purple)">🚀 FUTURO</span>
+            <span class="vector-pct" id="vecFuturoPct" style="color: var(--purple)">0%</span>
+          </div>
+          <div class="vector-bar-bg">
+            <div class="vector-bar-fill" id="vecFuturoBar" style="width:0%; background: linear-gradient(90deg, var(--purple), #8844ff);"></div>
+          </div>
+          <div class="vector-values">
+            <span id="vecFuturoSpent">R$ 0</span>
+            <span id="vecFuturoLimit">/ R$ 500</span>
+          </div>
+        </div>
+        <div class="vector-card" id="vecExpans">
+          <div class="vector-header">
+            <span class="vector-name" style="color: var(--gold)">🎮 EXPANSÃO</span>
+            <span class="vector-pct" id="vecExpansPct" style="color: var(--gold)">0%</span>
+          </div>
+          <div class="vector-bar-bg">
+            <div class="vector-bar-fill" id="vecExpansBar" style="width:0%; background: linear-gradient(90deg, var(--gold), #ff8800);"></div>
+          </div>
+          <div class="vector-values">
+            <span id="vecExpansSpent">R$ 0</span>
+            <span id="vecExpansLimit">/ R$ 750</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: TRANSACTIONS -->
+    <div class="tab-content" id="tab-transactions">
+      <div class="section-card">
+        <div class="section-title">
+          📋 TRANSAÇÕES DO MÊS <span class="line"></span>
+        </div>
+        <div id="transactionsBody">
+          <div class="empty-state">
+            <div class="icon">📭</div>
+            <p>Nenhuma transação registrada ainda.</p>
+            <p>Use o campo acima para começar!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: SIMULATOR -->
+    <div class="tab-content" id="tab-simulator">
+      <div class="impulse-section">
+        <div class="section-card">
+          <div class="section-title">
+            🎯 SIMULADOR DE COMPRA <span class="line"></span>
+          </div>
+          <div class="impulse-input-group">
+            <input type="text" id="impulseItem" placeholder="Nome do item (ex: iPhone)">
+            <input type="number" id="impulseValue" placeholder="Valor (R$)">
+            <button class="btn-simulate" onclick="simulateImpulse()">SIMULAR</button>
+          </div>
+          <div class="sim-result" id="simResult">
+            <div class="sim-card">
+              <div class="sim-label">⏱️ Horas de Trabalho</div>
+              <div class="sim-value" id="simHours" style="color: var(--cyan)">—</div>
+            </div>
+            <div class="sim-card">
+              <div class="sim-label">📈 Em 1 Ano</div>
+              <div class="sim-value" id="sim1y" style="color: var(--green)">—</div>
+            </div>
+            <div class="sim-card">
+              <div class="sim-label">📈 Em 5 Anos</div>
+              <div class="sim-value" id="sim5y" style="color: var(--gold)">—</div>
+            </div>
+            <div class="sim-card">
+              <div class="sim-label">📈 Em 10 Anos</div>
+              <div class="sim-value" id="sim10y" style="color: var(--magenta)">—</div>
+            </div>
+          </div>
+          <div id="simVerdict" style="margin-top:15px; padding:15px; background:var(--bg-primary); border-radius:10px; border:1px solid var(--border); display:none; font-size:0.9rem; line-height:1.6;"></div>
+        </div>
+        <div class="section-card">
+          <div class="section-title">
+            📊 HISTÓRICO DE SIMULAÇÕES <span class="line"></span>
+          </div>
+          <div id="simHistory">
+            <div class="empty-state">
+              <div class="icon">🎯</div>
+              <p>Simule uma compra para ver o impacto.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: PROJECTION -->
+    <div class="tab-content" id="tab-projection">
+      <div class="section-card">
+        <div class="section-title">
+          📈 PROJEÇÃO PATRIMONIAL (JUROS COMPOSTOS) <span class="line"></span>
+        </div>
+        <div class="chart-container">
+          <canvas id="projChart"></canvas>
+        </div>
+        <div style="margin-top:20px;">
+          <table class="transactions-table" id="projTable">
+            <thead>
+              <tr>
+                <th>Horizonte</th>
+                <th>Aporte/Mês</th>
+                <th>Total Investido</th>
+                <th>Patrimônio</th>
+                <th>Juros Ganhos</th>
+              </tr>
+            </thead>
+            <tbody id="projTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: LEAKS -->
+    <div class="tab-content" id="tab-leaks">
+      <div class="section-card">
+        <div class="section-title">
+          🔍 DETECÇÃO DE VAZAMENTOS SILENCIOSOS <span class="line"></span>
+        </div>
+        <div id="leaksBody">
+          <div class="empty-state">
+            <div class="icon">🔎</div>
+            <p>Registre transações para que eu detecte padrões de vazamento.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      ⚡ QUANTUM FINANCIAL SUITE v2.0 — COPILOTO DE ULTRA-BAIXA FRICÇÃO<br>
+      📌 Sugestões educativas. Consulte um profissional certificado (CEA/CFP) para decisões de maior porte.<br>
+      Desenvolvido por <a href="https://github.com/LuidiSilva05" target="_blank">Luidi Silva</a>
+    </footer>
+
+  </div>
+
+<script>
+// ============================
+// STATE
+// ============================
+let state = {
+  renda: 5000,
+  taxaAnual: 0.12,
+  vetores: { sobrev: 55, aceler: 20, futuro: 10, expans: 15 },
+  transactions: [],
+  simulations: [],
+};
+
+// Load from localStorage
+const saved = localStorage.getItem('quantumFinState');
+if (saved) {
+  try {
+    const parsed = JSON.parse(saved);
+    state = { ...state, ...parsed };
+    document.getElementById('inputRenda').value = state.renda;
+    document.getElementById('inputSobrev').value = state.vetores.sobrev;
+    document.getElementById('inputAceler').value = state.vetores.aceler;
+    document.getElementById('inputFuturo').value = state.vetores.futuro;
+    document.getElementById('inputExpans').value = state.vetores.expans;
+    document.getElementById('inputTaxa').value = state.taxaAnual * 100;
+  } catch(e) {}
+}
+
+function saveState() {
+  localStorage.setItem('quantumFinState', JSON.stringify(state));
+}
+
+// ============================
+// CATEGORY DETECTION
+// ============================
+const categoryMap = {
+  'almoço': { cat: 'Alimentação', vetor: 'sobrev', icon: '🍽️' },
+  'almoco': { cat: 'Alimentação', vetor: 'sobrev', icon: '🍽️' },
+  'jantar': { cat: 'Alimentação', vetor: 'sobrev', icon: '🍽️' },
+  'lanche': { cat: 'Alimentação', vetor: 'sobrev', icon: '🍽️' },
+  'café': { cat: 'Alimentação', vetor: 'sobrev', icon: '☕' },
+  'cafe': { cat: 'Alimentação', vetor: 'sobrev', icon: '☕' },
+  'cafezinho': { cat: 'Alimentação', vetor: 'sobrev', icon: '☕' },
+  'mercado': { cat: 'Alimentação', vetor: 'sobrev', icon: '🛒' },
+  'supermercado': { cat: 'Alimentação', vetor: 'sobrev', icon: '🛒' },
+  'ifood': { cat: 'Alimentação', vetor: 'sobrev', icon: '🍕' },
+  'uber eats': { cat: 'Alimentação', vetor: 'sobrev', icon: '🍕' },
+  'delivery': { cat: 'Alimentação', vetor: 'sobrev', icon: '🍕' },
+  'padaria': { cat: 'Alimentação', vetor: 'sobrev', icon: '🥖' },
+  'uber': { cat: 'Transporte', vetor: 'sobrev', icon: '🚗' },
+  '99': { cat: 'Transporte', vetor: 'sobrev', icon: '🚗' },
+  'gasolina': { cat: 'Transporte', vetor: 'sobrev', icon: '⛽' },
+  'combustivel': { cat: 'Transporte', vetor: 'sobrev', icon: '⛽' },
+  'combustível': { cat: 'Transporte', vetor: 'sobrev', icon: '⛽' },
+  'estacionamento': { cat: 'Transporte', vetor: 'sobrev', icon: '🅿️' },
+  'ônibus': { cat: 'Transporte', vetor: 'sobrev', icon: '🚌' },
+  'onibus': { cat: 'Transporte', vetor: 'sobrev', icon: '🚌' },
+  'metrô': { cat: 'Transporte', vetor: 'sobrev', icon: '🚇' },
+  'metro': { cat: 'Transporte', vetor: 'sobrev', icon: '🚇' },
+  'aluguel': { cat: 'Moradia', vetor: 'sobrev', icon: '🏠' },
+  'condomínio': { cat: 'Moradia', vetor: 'sobrev', icon: '🏢' },
+  'condominio': { cat: 'Moradia', vetor: 'sobrev', icon: '🏢' },
+  'luz': { cat: 'Moradia', vetor: 'sobrev', icon: '💡' },
+  'energia': { cat: 'Moradia', vetor: 'sobrev', icon: '💡' },
+  'água': { cat: 'Moradia', vetor: 'sobrev', icon: '💧' },
+  'agua': { cat: 'Moradia', vetor: 'sobrev', icon: '💧' },
+  'gás': { cat: 'Moradia', vetor: 'sobrev', icon: '🔥' },
+  'gas': { cat: 'Moradia', vetor: 'sobrev', icon: '🔥' },
+  'internet': { cat: 'Moradia', vetor: 'sobrev', icon: '🌐' },
+  'celular': { cat: 'Moradia', vetor: 'sobrev', icon: '📱' },
+  'telefone': { cat: 'Moradia', vetor: 'sobrev', icon: '📱' },
+  'farmácia': { cat: 'Saúde', vetor: 'sobrev', icon: '💊' },
+  'farmacia': { cat: 'Saúde', vetor: 'sobrev', icon: '💊' },
+  'remédio': { cat: 'Saúde', vetor: 'sobrev', icon: '💊' },
+  'remedio': { cat: 'Saúde', vetor: 'sobrev', icon: '💊' },
+  'médico': { cat: 'Saúde', vetor: 'sobrev', icon: '🏥' },
+  'medico': { cat: 'Saúde', vetor: 'sobrev', icon: '🏥' },
+  'plano de saúde': { cat: 'Saúde', vetor: 'sobrev', icon: '🏥' },
+  'academia': { cat: 'Saúde', vetor: 'sobrev', icon: '🏋️' },
+  'netflix': { cat: 'Assinatura', vetor: 'expans', icon: '🎬' },
+  'spotify': { cat: 'Assinatura', vetor: 'expans', icon: '🎵' },
+  'disney': { cat: 'Assinatura', vetor: 'expans', icon: '🎬' },
+  'hbo': { cat: 'Assinatura', vetor: 'expans', icon: '🎬' },
+  'prime': { cat: 'Assinatura', vetor: 'expans', icon: '📦' },
+  'youtube': { cat: 'Assinatura', vetor: 'expans', icon: '▶️' },
+  'meditação': { cat: 'Assinatura', vetor: 'expans', icon: '🧘' },
+  'meditacao': { cat: 'Assinatura', vetor: 'expans', icon: '🧘' },
+  'assinatura': { cat: 'Assinatura', vetor: 'expans', icon: '📋' },
+  'curso': { cat: 'Educação', vetor: 'futuro', icon: '📚' },
+  'udemy': { cat: 'Educação', vetor: 'futuro', icon: '📚' },
+  'livro': { cat: 'Educação', vetor: 'futuro', icon: '📖' },
+  'escola': { cat: 'Educação', vetor: 'futuro', icon: '🎓' },
+  'faculdade': { cat: 'Educação', vetor: 'futuro', icon: '🎓' },
+  'bar': { cat: 'Lazer', vetor: 'expans', icon: '🍺' },
+  'happy hour': { cat: 'Lazer', vetor: 'expans', icon: '🍻' },
+  'cinema': { cat: 'Lazer', vetor: 'expans', icon: '🎬' },
+  'show': { cat: 'Lazer', vetor: 'expans', icon: '🎤' },
+  'festa': { cat: 'Lazer', vetor: 'expans', icon: '🎉' },
+  'viagem': { cat: 'Lazer', vetor: 'futuro', icon: '✈️' },
+  'presente': { cat: 'Presentes', vetor: 'futuro', icon: '🎁' },
+  'roupa': { cat: 'Vestuário', vetor: 'expans', icon: '👕' },
+  'tênis': { cat: 'Vestuário', vetor: 'expans', icon: '👟' },
+  'tenis': { cat: 'Vestuário', vetor: 'expans', icon: '👟' },
+  'sapato': { cat: 'Vestuário', vetor: 'expans', icon: '👞' },
+  'investimento': { cat: 'Investimento', vetor: 'aceler', icon: '📈' },
+  'tesouro': { cat: 'Investimento', vetor: 'aceler', icon: '📈' },
+  'cdb': { cat: 'Investimento', vetor: 'aceler', icon: '📈' },
+  'ação': { cat: 'Investimento', vetor: 'aceler', icon: '📈' },
+  'acao': { cat: 'Investimento', vetor: 'aceler', icon: '📈' },
+  'fii': { cat: 'Investimento', vetor: 'aceler', icon: '🏗️' },
+  'poupança': { cat: 'Investimento', vetor: 'aceler', icon: '🏦' },
+  'poupanca': { cat: 'Investimento', vetor: 'aceler', icon: '🏦' },
+};
+
+const paymentKeywords = {
+  'pix': 'Pix', 'cartão': 'Cartão', 'cartao': 'Cartão',
+  'crédito': 'Crédito', 'credito': 'Crédito',
+  'débito': 'Débito', 'debito': 'Débito',
+  'dinheiro': 'Dinheiro', 'boleto': 'Boleto',
+};
+
+function detectCategory(text) {
+  const lower = text.toLowerCase();
+  // Check multi-word matches first
+  for (const [keyword, info] of Object.entries(categoryMap).sort((a,b) => b[0].length - a[0].length)) {
+    if (lower.includes(keyword)) return info;
+  }
+  return { cat: 'Outros', vetor: 'sobrev', icon: '📌' };
+}
+
+function detectPayment(text) {
+  const lower = text.toLowerCase();
+  for (const [keyword, name] of Object.entries(paymentKeywords)) {
+    if (lower.includes(keyword)) return name;
+  }
+  return 'N/I';
+}
+
+// ============================
+// PARSE INPUT
+// ============================
+function parseInput(text) {
+  const transactions = [];
+  // Split by 'e', ',', ';', 'mais', '+'
+  const parts = text.split(/(?:,|;|\se\s|\smais\s|\+)/i).map(s => s.trim()).filter(Boolean);
+
+  for (const part of parts) {
+    // Find number (value)
+    const numMatch = part.match(/(\d+[.,]?\d*)/);
+    if (!numMatch) continue;
+
+    const value = parseFloat(numMatch[1].replace(',', '.'));
+    if (isNaN(value) || value <= 0) continue;
+
+    // Remove the number to get description
+    let desc = part.replace(numMatch[0], '').trim();
+    // Clean up common words
+    desc = desc.replace(/^(gastei|paguei|comprei|de|do|da|no|na|em|por|um|uma|r\$)\s*/gi, '').trim();
+    desc = desc.replace(/\s+(de|do|da|no|na|em|por)$/gi, '').trim();
+    if (!desc) desc = 'Registro';
+
+    // Capitalize
+    desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+
+    const catInfo = detectCategory(part);
+    const payment = detectPayment(part);
+
+    transactions.push({
+      id: Date.now() + Math.random(),
+      date: new Date().toISOString().split('T')[0],
+      desc,
+      value,
+      category: catInfo.cat,
+      vetor: catInfo.vetor,
+      icon: catInfo.icon,
+      payment,
+      timestamp: Date.now(),
+    });
+  }
+
+  return transactions;
+}
+
+// ============================
+// PROCESS INPUT
+// ============================
+function processInput() {
+  const input = document.getElementById('mainInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const newTx = parseInput(text);
+  if (newTx.length === 0) {
+    showToast('⚠️ Não encontrei valores. Tente: "45 almoço e 12 uber"');
+    return;
+  }
+
+  state.transactions.push(...newTx);
+  saveState();
+  input.value = '';
+
+  const total = newTx.reduce((s, t) => s + t.value, 0);
+  showToast(`✅ ${newTx.length} transação(ões) registrada(s) — R$ ${total.toFixed(2)}`);
+
+  updateDashboard();
+}
+
+function fillExample(text) {
+  document.getElementById('mainInput').value = text;
+  document.getElementById('mainInput').focus();
+}
+
+// ============================
+// UPDATE DASHBOARD
+// ============================
+function updateDashboard() {
+  const renda = state.renda;
+  const txs = state.transactions;
+  const gastos = txs.reduce((s, t) => s + t.value, 0);
+  const sobra = renda - gastos;
+
+  // KPIs
+  document.getElementById('kpiRenda').textContent = formatMoney(renda);
+  document.getElementById('kpiGastos').textContent = formatMoney(gastos);
+  document.getElementById('kpiGastosPct').textContent = `${((gastos/renda)*100).toFixed(1)}% da renda`;
+  document.getElementById('kpiSobra').textContent = formatMoney(sobra);
+  document.getElementById('kpiSobra').className = `kpi-value ${sobra >= 0 ? 'positive' : 'negative'}`;
+  document.getElementById('kpiSobraPct').textContent = `${((sobra/renda)*100).toFixed(1)}% livre`;
+  document.getElementById('kpiTx').textContent = txs.length;
+
+  // Days remaining
+  const now = new Date();
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  document.getElementById('kpiDias').textContent = lastDay.getDate() - now.getDate();
+
+  // Vectors
+  const vetorTotals = { sobrev: 0, aceler: 0, futuro: 0, expans: 0 };
+  txs.forEach(t => { vetorTotals[t.vetor] = (vetorTotals[t.vetor] || 0) + t.value; });
+
+  const vecConfig = [
+    { key: 'sobrev', pctEl: 'vecSobrevPct', barEl: 'vecSobrevBar', spentEl: 'vecSobrevSpent', limitEl: 'vecSobrevLimit', pctKey: 'sobrev' },
+    { key: 'aceler', pctEl: 'vecAccelPct', barEl: 'vecAccelBar', spentEl: 'vecAccelSpent', limitEl: 'vecAccelLimit', pctKey: 'aceler' },
+    { key: 'futuro', pctEl: 'vecFuturoPct', barEl: 'vecFuturoBar', spentEl: 'vecFuturoSpent', limitEl: 'vecFuturoLimit', pctKey: 'futuro' },
+    { key: 'expans', pctEl: 'vecExpansPct', barEl: 'vecExpansBar', spentEl: 'vecExpansSpent', limitEl: 'vecExpansLimit', pctKey: 'expans' },
+  ];
+
+  vecConfig.forEach(vc => {
+    const limit = renda * (state.vetores[vc.pctKey] / 100);
+    const spent = vetorTotals[vc.key] || 0;
+    const pct = limit > 0 ? Math.min((spent / limit) * 100, 120) : 0;
+
+    document.getElementById(vc.pctEl).textContent = `${pct.toFixed(0)}%`;
+    document.getElementById(vc.barEl).style.width = `${Math.min(pct, 100)}%`;
+    document.getElementById(vc.spentEl).textContent = formatMoney(spent);
+    document.getElementById(vc.limitEl).textContent = `/ ${formatMoney(limit)}`;
+  });
+
+  // Transactions table
+  renderTransactions();
+  // Projection
+  renderProjection();
+  // Leaks
+  renderLeaks();
+}
+
+// ============================
+// RENDER TRANSACTIONS
+// ============================
+function renderTransactions() {
+  const container = document.getElementById('transactionsBody');
+  const txs = [...state.transactions].reverse();
+
+  if (txs.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>Nenhuma transação registrada ainda.</p></div>`;
+    return;
+  }
+
+  const vetorLabels = { sobrev: 'Sobrevivência', aceler: 'Aceleração', futuro: 'Futuro', expans: 'Expansão' };
+  const vetorClass = { sobrev: 'sobrev', aceler: 'aceler', futuro: 'futuro', expans: 'expans' };
+
+  let html = `<table class="transactions-table"><thead><tr>
+    <th>Data</th><th>Descrição</th><th>Valor</th><th>Categoria</th><th>Vetor</th><th>Pgto</th><th></th>
+  </tr></thead><tbody>`;
+
+  txs.forEach(t => {
+    const amtClass = t.value > 200 ? 'high' : (t.value > 50 ? 'mid' : 'low');
+    html += `<tr>
+      <td style="font-family:'Share Tech Mono',monospace; font-size:0.8rem; color:var(--text-dim)">${t.date}</td>
+      <td>${t.icon} ${t.desc}</td>
+      <td><span class="tx-amount ${amtClass}">R$ ${t.value.toFixed(2)}</span></td>
+      <td style="color:var(--text-dim)">${t.category}</td>
+      <td><span class="tx-vector ${vetorClass[t.vetor]}">${vetorLabels[t.vetor]}</span></td>
+      <td style="color:var(--text-dim); font-size:0.85rem">${t.payment}</td>
+      <td><button class="tx-delete" onclick="deleteTx(${t.id})">✕</button></td>
+    </tr>`;
+  });
+
+  html += `</tbody></table>`;
+  container.innerHTML = html;
+}
+
+function deleteTx(id) {
+  state.transactions = state.transactions.filter(t => t.id !== id);
+  saveState();
+  updateDashboard();
+  showToast('🗑️ Transação removida');
+}
+
+// ============================
+// IMPULSE SIMULATOR
+// ============================
+function simulateImpulse() {
+  const item = document.getElementById('impulseItem').value.trim() || 'Item';
+  const value = parseFloat(document.getElementById('impulseValue').value);
+  if (isNaN(value) || value <= 0) {
+    showToast('⚠️ Insira um valor válido');
+    return;
+  }
+
+  const valorHora = state.renda / 160;
+  const horas = value / valorHora;
+  const taxa = state.taxaAnual;
+  const em1 = value * Math.pow(1 + taxa, 1);
+  const em5 = value * Math.pow(1 + taxa, 5);
+  const em10 = value * Math.pow(1 + taxa, 10);
+
+  document.getElementById('simHours').textContent = `${horas.toFixed(1)}h`;
+  document.getElementById('sim1y').textContent = formatMoney(em1);
+  document.getElementById('sim5y').textContent = formatMoney(em5);
+  document.getElementById('sim10y').textContent = formatMoney(em10);
+
+  const verdict = document.getElementById('simVerdict');
+  verdict.style.display = 'block';
+  verdict.innerHTML = `
+    <strong style="color:var(--gold)">🎯 Análise: ${item} por ${formatMoney(value)}</strong><br><br>
+    Esse item custa <strong style="color:var(--cyan)">${horas.toFixed(1)} horas</strong> do seu trabalho.<br>
+    Se investido no Vetor Aceleração a ${(taxa*100).toFixed(0)}% a.a., esse valor se tornaria
+    <strong style="color:var(--green)">${formatMoney(em10)}</strong> em 10 anos.<br><br>
+    <span style="color:var(--text-dim)">💡 Se o item melhora sua produtividade ou qualidade de vida diária, é um investimento em você.
+    Se é impulso, considere que ${formatMoney(value)} hoje → ${formatMoney(em10)} amanhã.</span>
+  `;
+
+  // Add to history
+  const sim = { item, value, horas, em1, em5, em10, date: new Date().toLocaleDateString('pt-BR') };
+  state.simulations.push(sim);
+  saveState();
+  renderSimHistory();
+}
+
+function renderSimHistory() {
+  const container = document.getElementById('simHistory');
+  if (state.simulations.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="icon">🎯</div><p>Simule uma compra para ver o impacto.</p></div>`;
+    return;
+  }
+
+  let html = `<table class="transactions-table"><thead><tr>
+    <th>Item</th><th>Valor</th><th>Horas</th><th>10 anos</th>
+  </tr></thead><tbody>`;
+
+  [...state.simulations].reverse().forEach(s => {
+    html += `<tr>
+      <td>${s.item}</td>
+      <td class="tx-amount mid">${formatMoney(s.value)}</td>
+      <td style="color:var(--cyan)">${s.horas.toFixed(1)}h</td>
+      <td style="color:var(--green)">${formatMoney(s.em10)}</td>
+    </tr>`;
+  });
+
+  html += `</tbody></table>`;
+  container.innerHTML = html;
+}
+
+// ============================
+// PROJECTION
+// ============================
+function renderProjection() {
+  const aporte = state.renda * (state.vetores.aceler / 100);
+  const taxa = state.taxaAnual;
+  const taxaMensal = Math.pow(1 + taxa, 1/12) - 1;
+  const horizontes = [1, 2, 3, 5, 10, 15, 20, 25, 30];
+
+  const tbody = document.getElementById('projTableBody');
+  let html = '';
+  const dados = [];
+
+  horizontes.forEach(anos => {
+    const meses = anos * 12;
+    const patrimonio = aporte * ((Math.pow(1 + taxaMensal, meses) - 1) / taxaMensal);
+    const totalInv = aporte * meses;
+    const juros = patrimonio - totalInv;
+    dados.push({ anos, patrimonio, totalInv, juros });
+
+    html += `<tr>
+      <td style="font-family:'Orbitron',sans-serif; font-weight:600; color:var(--cyan)">${anos} anos</td>
+      <td style="color:var(--text-dim)">${formatMoney(aporte)}/mês</td>
+      <td style="color:var(--text-dim)">${formatMoney(totalInv)}</td>
+      <td style="color:var(--green); font-weight:700; font-family:'Orbitron',sans-serif">${formatMoney(patrimonio)}</td>
+      <td style="color:var(--gold); font-weight:600">${formatMoney(juros)}</td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = html;
+  renderChart(dados);
+}
+
+// ============================
+// CHART (Canvas)
+// ============================
+function renderChart(dados) {
+  const canvas = document.getElementById('projChart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width = canvas.parentElement.offsetWidth * dpr;
+  canvas.height = 280 * dpr;
+  canvas.style.width = canvas.parentElement.offsetWidth + 'px';
+  canvas.style.height = '280px';
+  ctx.scale(dpr, dpr);
+
+  const W = canvas.parentElement.offsetWidth;
+  const H = 280;
+  const pad = { top: 30, right: 30, bottom: 40, left: 80 };
+  const chartW = W - pad.left - pad.right;
+  const chartH = H - pad.top - pad.bottom;
+
+  ctx.clearRect(0, 0, W, H);
+
+  if (dados.length === 0) return;
+
+  const maxVal = Math.max(...dados.map(d => d.patrimonio));
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(0,245,255,0.08)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = pad.top + (chartH / 5) * i;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(W - pad.right, y);
+    ctx.stroke();
+
+    const val = maxVal - (maxVal / 5) * i;
+    ctx.fillStyle = '#6878a0';
+    ctx.font = '10px Share Tech Mono, monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText(formatCompact(val), pad.left - 10, y + 4);
+  }
+
+  // X labels
+  ctx.fillStyle = '#6878a0';
+  ctx.textAlign = 'center';
+  ctx.font = '10px Share Tech Mono, monospace';
+  dados.forEach((d, i) => {
+    const x = pad.left + (chartW / (dados.length - 1)) * i;
+    ctx.fillText(d.anos + 'a', x, H - 10);
+  });
+
+  // Area fills
+  function drawArea(key, color, alpha) {
+    ctx.beginPath();
+    dados.forEach((d, i) => {
+      const x = pad.left + (chartW / (dados.length - 1)) * i;
+      const y = pad.top + chartH - (d[key] / maxVal) * chartH;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.lineTo(pad.left + chartW, pad.top + chartH);
+    ctx.lineTo(pad.left, pad.top + chartH);
+    ctx.closePath();
+
+    const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + chartH);
+    grad.addColorStop(0, color.replace(')', `,${alpha})`).replace('rgb', 'rgba'));
+    grad.addColorStop(1, color.replace(')', ',0)').replace('rgb', 'rgba'));
+    ctx.fillStyle = grad;
+    ctx.fill();
+  }
+
+  drawArea('totalInv', 'rgb(0,245,255)', 0.15);
+  drawArea('patrimonio', 'rgb(57,255,20)', 0.12);
+
+  // Lines
+  function drawLine(key, color, width) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    dados.forEach((d, i) => {
+      const x = pad.left + (chartW / (dados.length - 1)) * i;
+      const y = pad.top + chartH - (d[key] / maxVal) * chartH;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+
+  drawLine('totalInv', '#00f5ff', 2);
+  drawLine('patrimonio', '#39ff14', 2.5);
+  drawLine('juros', '#ffd700', 1.5);
+
+  // Dots on patrimonio
+  dados.forEach((d, i) => {
+    const x = pad.left + (chartW / (dados.length - 1)) * i;
+    const y = pad.top + chartH - (d.patrimonio / maxVal) * chartH;
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#39ff14';
+    ctx.fill();
+    ctx.strokeStyle = '#0d1025';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+
+  // Legend
+  const legendY = 12;
+  const legends = [
+    { label: 'Patrimônio', color: '#39ff14' },
+    { label: 'Investido', color: '#00f5ff' },
+    { label: 'Juros', color: '#ffd700' },
+  ];
+  let legendX = pad.left;
+  legends.forEach(l => {
+    ctx.fillStyle = l.color;
+    ctx.fillRect(legendX, legendY - 5, 12, 3);
+    ctx.fillStyle = '#6878a0';
+    ctx.font = '10px Share Tech Mono, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText(l.label, legendX + 16, legendY);
+    legendX += ctx.measureText(l.label).width + 35;
+  });
+}
+
+// ============================
+// LEAKS DETECTION
+// ============================
+function renderLeaks() {
+  const container = document.getElementById('leaksBody');
+  const txs = state.transactions;
+
+  if (txs.length < 2) {
+    container.innerHTML = `<div class="empty-state"><div class="icon">🔎</div><p>Registre mais transações para detectar padrões.</p></div>`;
+    return;
+  }
+
+  // Group by category
+  const catTotals = {};
+  txs.forEach(t => {
+    if (!catTotals[t.category]) catTotals[t.category] = { total: 0, count: 0, items: [] };
+    catTotals[t.category].total += t.value;
+    catTotals[t.category].count++;
+    catTotals[t.category].items.push(t);
+  });
+
+  // Find leaks: subscriptions, frequent small purchases
+  const taxaMensal = Math.pow(1 + state.taxaAnual, 1/12) - 1;
+  let html = `<table class="transactions-table"><thead><tr>
+    <th>Padrão</th><th>Mensal (est.)</th><th>Anual</th><th>Em 5 anos investido</th><th>Status</th>
+  </tr></thead><tbody>`;
+
+  let hasLeaks = false;
+
+  Object.entries(catTotals).forEach(([cat, data]) => {
+    if (data.count >= 2 || cat === 'Assinatura') {
+      hasLeaks = true;
+      const mensal = data.total; // assume current month data
+      const anual = mensal * 12;
+      const em5 = mensal * ((Math.pow(1 + taxaMensal, 60) - 1) / taxaMensal);
+      const status = mensal > 200 ? '🚨 Alto impacto' : (mensal > 50 ? '⚠️ Monitorar' : '✅ Baixo');
+      const statusColor = mensal > 200 ? 'var(--magenta)' : (mensal > 50 ? 'var(--gold)' : 'var(--green)');
+
+      html += `<tr>
+        <td style="font-weight:600">${cat} (${data.count}x)</td>
+        <td style="color:var(--text)">${formatMoney(mensal)}</td>
+        <td style="color:var(--gold)">${formatMoney(anual)}</td>
+        <td style="color:var(--green); font-weight:700">${formatMoney(em5)}</td>
+        <td style="color:${statusColor}; font-weight:600">${status}</td>
+      </tr>`;
+    }
+  });
+
+  if (!hasLeaks) {
+    container.innerHTML = `<div class="empty-state"><div class="icon">✅</div><p>Nenhum padrão de vazamento detectado ainda. Continue registrando!</p></div>`;
+    return;
+  }
+
+  html += `</tbody></table>`;
+  html += `<div style="margin-top:15px; padding:12px; background:var(--bg-primary); border-radius:8px; border:1px solid var(--border); font-size:0.85rem; color:var(--text-dim)">
+    💡 <strong style="color:var(--cyan)">Dica:</strong> A coluna "Em 5 anos investido" mostra quanto esse dinheiro renderia se fosse redirecionado para o Vetor Aceleração a ${(state.taxaAnual*100).toFixed(0)}% a.a.
+  </div>`;
+
+  container.innerHTML = html;
+}
+
+// ============================
+// UTILITIES
+// ============================
+function formatMoney(val) {
+  return 'R$ ' + val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function formatCompact(val) {
+  if (val >= 1e6) return `R$ ${(val/1e6).toFixed(1)}M`;
+  if (val >= 1e3) return `R$ ${(val/1e3).toFixed(0)}K`;
+  return `R$ ${val.toFixed(0)}`;
+}
+
+function showToast(msg) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = msg;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3500);
+}
+
+function toggleConfig() {
+  document.getElementById('configPanel').classList.toggle('visible');
+}
+
+function updateConfig() {
+  state.renda = parseFloat(document.getElementById('inputRenda').value) || 5000;
+  state.vetores.sobrev = parseFloat(document.getElementById('inputSobrev').value) || 55;
+  state.vetores.aceler = parseFloat(document.getElementById('inputAceler').value) || 20;
+  state.vetores.futuro = parseFloat(document.getElementById('inputFuturo').value) || 10;
+  state.vetores.expans = parseFloat(document.getElementById('inputExpans').value) || 15;
+  state.taxaAnual = (parseFloat(document.getElementById('inputTaxa').value) || 12) / 100;
+  saveState();
+  updateDashboard();
+  showToast('⚙️ Configurações atualizadas!');
+}
+
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById(`tab-${tabName}`).classList.add('active');
+  event.target.classList.add('active');
+
+  if (tabName === 'projection') {
+    setTimeout(() => renderProjection(), 100);
+  }
+}
+
+// ============================
+// PARTICLE BACKGROUND
+// ============================
+function initParticles() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (let i = 0; i < 60; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      size: Math.random() * 2 + 0.5,
+      alpha: Math.random() * 0.3 + 0.1,
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0, 245, 255, ${p.alpha})`;
+      ctx.fill();
+    });
+
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 150) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(0, 245, 255, ${0.05 * (1 - dist / 150)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+}
+
+// ============================
+// INIT
+// ============================
+document.getElementById('currentDate').textContent = new Date().toLocaleDateString('pt-BR', {
+  weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+}).toUpperCase();
+
+initParticles();
+updateDashboard();
+renderSimHistory();
+
+// Responsive chart redraw
+window.addEventListener('resize', () => {
+  if (document.getElementById('tab-projection').classList.contains('active')) {
+    renderProjection();
+  }
+});
+</script>
+
+</body>
+</html>

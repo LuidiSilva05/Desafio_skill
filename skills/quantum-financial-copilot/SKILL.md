@@ -195,3 +195,4 @@ Usuário envia registro (texto/áudio/foto)
 ---
 
 *Quantum Financial Copilot v1.0 — Projetado para quem quer riqueza sem burocracia.* ⚡
+

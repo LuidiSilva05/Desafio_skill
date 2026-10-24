@@ -9,51 +9,44 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        space: {
-          950: "#030712",
-          900: "#060919",
-          850: "#0b112c",
-          800: "#0f1738",
-          700: "#1b2554",
+        kamino: {
+          50: "#EEF2FF",
+          100: "#E0E7FF",
+          200: "#C7D2FE",
+          300: "#A5B4FC",
+          400: "#818CF8",
+          500: "#6366F1",
+          600: "#4F46E5", // Kamino Brand Indigo
+          700: "#4338CA",
+          800: "#3730A3",
+          900: "#312E81",
+          950: "#1E1B4B",
         },
-        hud: {
-          cyan: "#00f5ff",
-          magenta: "#ff006e",
-          green: "#39ff14",
-          gold: "#ffd700",
-          purple: "#bf5af2",
-          orange: "#ff5722",
+        surface: {
+          ground: "#F8F9FD", // Clean subtle background
+          card: "#FFFFFF",
+          subtle: "#F1F5F9",
+          border: "#E2E8F0",
+        },
+        navy: {
+          900: "#0F172A",
+          800: "#1E293B",
+          700: "#334155",
+          600: "#475569",
         },
       },
       fontFamily: {
-        mono: ["var(--font-mono)", "Share Tech Mono", "monospace"],
-        orbitron: ["var(--font-orbitron)", "sans-serif"],
-        rajdhani: ["var(--font-rajdhani)", "sans-serif"],
+        sans: ["var(--font-inter)", "Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        heading: ["var(--font-jakarta)", "Plus Jakarta Sans", "Inter", "sans-serif"],
       },
       boxShadow: {
-        "neon-cyan": "0 0 20px rgba(0, 245, 255, 0.35)",
-        "neon-magenta": "0 0 20px rgba(255, 0, 110, 0.35)",
-        "neon-green": "0 0 20px rgba(57, 255, 20, 0.35)",
-        "neon-gold": "0 0 20px rgba(255, 215, 0, 0.35)",
-      },
-      animation: {
-        "pulse-fast": "pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "scan": "scan 6s linear infinite",
-        "hud-glow": "glow 3s ease-in-out infinite",
-      },
-      keyframes: {
-        scan: {
-          "0%": { top: "0%" },
-          "100%": { top: "100%" },
-        },
-        glow: {
-          "0%, 100%": { opacity: "0.8" },
-          "50%": { opacity: "1", filter: "brightness(1.2)" },
-        },
+        subtle: "0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03)",
+        card: "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
+        elevated: "0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.03)",
+        indigo: "0 4px 14px 0 rgba(79, 70, 229, 0.25)",
       },
     },
   },
   plugins: [],
 };
 export default config;
-

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
-import { Terminal, Settings, Radio, Sparkles, Camera, ShieldCheck, Database } from "lucide-react";
+import { Settings, Camera, Database, ShieldCheck, ChevronRight, Layers } from "lucide-react";
 
 interface HeaderHUDProps {
   onOpenScanner: () => void;
@@ -10,80 +10,64 @@ interface HeaderHUDProps {
 }
 
 export function HeaderHUD({ onOpenScanner, onOpenOpenFinance }: HeaderHUDProps) {
-  const [time, setTime] = useState<string>("");
-
-  useEffect(() => {
-    const update = () => {
-      const now = new Date();
-      setTime(
-        now.toISOString().replace("T", " | ").substring(0, 21) + " UTC"
-      );
-    };
-    update();
-    const interval = setInterval(update, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <header className="border-b border-cyan-500/20 bg-space-900/90 backdrop-blur-md sticky top-0 z-40 px-4 py-3">
-      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-        {/* Left: Brand & Telemetry Status */}
-        <div className="flex items-center space-x-3">
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-cyan-950/60 border border-hud-cyan text-hud-cyan shadow-neon-cyan">
-            <Radio className="w-5 h-5 animate-pulse" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-hud-green rounded-full shadow-[0_0_8px_#39ff14] animate-ping" />
+    <header className="border-b border-surface-border bg-white sticky top-0 z-40 px-6 py-3.5 shadow-subtle">
+      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+        {/* Left: Brand Identity */}
+        <div className="flex items-center space-x-3.5">
+          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-kamino-600 text-white shadow-indigo">
+            <Layers className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-orbitron font-extrabold text-lg tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-hud-cyan via-hud-purple to-hud-magenta">
-                QUANTUM MISSION CONTROL
+              <span className="font-heading font-extrabold text-base tracking-tight text-navy-900">
+                KAMINO
               </span>
-              <span className="hidden sm:inline-block text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/30 text-hud-cyan">
-                SPACEX HUD v2.4
+              <span className="font-heading font-semibold text-xs tracking-wider uppercase text-kamino-600 bg-kamino-50 px-2 py-0.5 rounded-full border border-kamino-100">
+                QUANTUM
               </span>
             </div>
-            <div className="text-xs font-mono text-slate-400 flex items-center space-x-2">
-              <span className="text-hud-green font-semibold flex items-center">
-                <span className="w-1.5 h-1.5 rounded-full bg-hud-green inline-block mr-1"></span>
-                TELEMETRY LINK: STABLE
+            <div className="text-[11px] text-slate-500 font-medium flex items-center space-x-2 mt-0.5">
+              <span className="flex items-center text-emerald-600 font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block mr-1"></span>
+                Operação em Tempo Real
               </span>
               <span>•</span>
-              <span className="hidden md:inline">{time}</span>
+              <span>Gestão de Patrimônio & Vetores</span>
             </div>
           </div>
         </div>
 
-        {/* Right: Action Buttons */}
-        <div className="flex items-center space-x-2">
+        {/* Right: Actions & Tools */}
+        <div className="flex items-center space-x-2.5">
           <button
             onClick={onOpenScanner}
-            className="flex items-center space-x-1.5 text-xs font-mono uppercase px-3 py-1.5 rounded bg-space-850 hover:bg-space-800 border border-hud-cyan/40 text-hud-cyan hover:border-hud-cyan shadow-sm hover:shadow-neon-cyan transition-all"
-            title="Scan QR Code, Boleto ou Cupom Fiscal"
+            className="flex items-center space-x-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-navy-900 shadow-sm transition-all"
+            title="Leitor de Cupons Fiscais NFC-e e Boletos"
           >
-            <Camera className="w-4 h-4" />
+            <Camera className="w-4 h-4 text-slate-500" />
             <span className="hidden sm:inline">Scanner OCR / QR</span>
           </button>
 
           <button
             onClick={onOpenOpenFinance}
-            className="flex items-center space-x-1.5 text-xs font-mono uppercase px-3 py-1.5 rounded bg-space-850 hover:bg-space-800 border border-hud-purple/40 text-hud-purple hover:border-hud-purple shadow-sm hover:shadow-[0_0_15px_rgba(191,90,242,0.4)] transition-all"
-            title="Open Finance & Extratos OFX/CSV"
+            className="flex items-center space-x-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-navy-900 shadow-sm transition-all"
+            title="Conexão com Bancos e Extratos"
           >
-            <Database className="w-4 h-4" />
+            <Database className="w-4 h-4 text-kamino-600" />
             <span className="hidden sm:inline">Open Finance</span>
           </button>
 
           <Link
             href="/settings"
-            className="flex items-center space-x-1.5 text-xs font-mono uppercase px-3 py-1.5 rounded bg-space-850 hover:bg-space-800 border border-slate-700 text-slate-300 hover:text-hud-cyan hover:border-hud-cyan transition-all"
-            title="Ajuste parâmetros, salário e vetores"
+            className="flex items-center space-x-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg bg-kamino-600 hover:bg-kamino-700 text-white shadow-sm hover:shadow-indigo transition-all"
+            title="Ajuste de Salário, Horas e Vetores"
           >
             <Settings className="w-4 h-4" />
-            <span className="hidden sm:inline">Configurações</span>
+            <span>Configurações</span>
           </Link>
         </div>
       </div>
     </header>
   );
 }
-

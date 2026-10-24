@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Mic, MicOff, Volume2, Sparkles, AlertCircle } from "lucide-react";
+import { Mic, MicOff, Volume2, Sparkles, Check, AlertCircle } from "lucide-react";
 import { useFinancial } from "../context/FinancialContext";
 
 export function VoiceCommander() {
@@ -95,54 +95,51 @@ export function VoiceCommander() {
   };
 
   return (
-    <div className="hud-box rounded-xl p-4 border border-cyan-500/30 bg-space-900/80">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center space-x-3">
+    <div className="kamino-card p-4">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center space-x-3.5">
           <button
             onClick={toggleListening}
-            className={`relative flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300 ${
+            className={`flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-200 ${
               isListening
-                ? "bg-hud-magenta text-white shadow-neon-magenta animate-pulse scale-105"
-                : "bg-space-850 border border-hud-cyan/40 text-hud-cyan hover:border-hud-cyan hover:shadow-neon-cyan"
+                ? "bg-red-500 text-white shadow-md animate-pulse"
+                : "bg-kamino-50 text-kamino-600 hover:bg-kamino-100 border border-kamino-200/80"
             }`}
-            title="Clique para falar (hands-free)"
+            title="Gravação por voz mãos-livres"
           >
-            {isListening ? <Mic className="w-6 h-6 animate-bounce" /> : <Mic className="w-5 h-5" />}
-            {isListening && (
-              <span className="absolute -inset-1 rounded-xl bg-hud-magenta/30 animate-ping" />
-            )}
+            {isListening ? <Mic className="w-5 h-5 animate-bounce" /> : <Mic className="w-5 h-5" />}
           </button>
 
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-orbitron font-bold text-xs uppercase tracking-wider text-hud-cyan">
-                VOICE TELEMETRY INTERFACE
+              <span className="font-heading font-semibold text-xs uppercase tracking-wider text-navy-900">
+                Captura Hands-Free por Voz
               </span>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-space-950 text-slate-400 border border-slate-800">
-                WEB SPEECH API
+              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                Web Speech / Whisper API
               </span>
             </div>
-            <p className="text-xs font-mono text-slate-400">
+            <p className="text-xs text-slate-500 mt-0.5">
               {isListening
-                ? "Captação de voz ativa... Fale agora."
-                : "Clique no microfone para registro falado em 3 segundos."}
+                ? "Microfone ativo... Fale suas despesas ou aportes agora."
+                : "Dite despesas em linguagem natural para registro instantâneo em 3 segundos."}
             </p>
           </div>
         </div>
 
         {transcript && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center space-x-2">
             <button
               onClick={handleProcessTranscript}
-              className="text-xs font-mono font-bold px-3 py-1.5 rounded bg-gradient-to-r from-hud-cyan to-blue-500 text-space-950 hover:brightness-110 shadow-neon-cyan transition-all uppercase"
+              className="text-xs font-semibold px-4 py-2 rounded-lg bg-kamino-600 hover:bg-kamino-700 text-white shadow-sm transition-all"
             >
-              Confirmar Voz
+              Confirmar e Categorizar
             </button>
             <button
               onClick={() => setTranscript("")}
-              className="text-xs font-mono px-2 py-1.5 rounded bg-space-850 text-slate-400 hover:text-white"
+              className="text-xs font-medium px-3 py-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all"
             >
-              Limpar
+              Cancelar
             </button>
           </div>
         )}
@@ -150,29 +147,28 @@ export function VoiceCommander() {
 
       {/* Live Transcript Display */}
       {transcript && (
-        <div className="mt-3 p-2.5 rounded bg-space-950 border border-hud-cyan/40 font-mono text-sm text-hud-cyan flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Volume2 className="w-4 h-4 text-hud-cyan animate-pulse" />
-            <span>&quot;{transcript}&quot;</span>
+        <div className="mt-3.5 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm text-navy-900 flex items-center justify-between">
+          <div className="flex items-center space-x-2.5">
+            <Volume2 className="w-4 h-4 text-kamino-600 flex-shrink-0" />
+            <span className="font-medium">&quot;{transcript}&quot;</span>
           </div>
         </div>
       )}
 
-      {/* Feedback Toast */}
+      {/* Feedback Alert */}
       {feedback && (
-        <div className="mt-2 text-xs font-mono text-hud-green flex items-center space-x-1.5">
-          <Sparkles className="w-3.5 h-3.5" />
+        <div className="mt-2.5 text-xs font-medium text-emerald-600 flex items-center space-x-1.5">
+          <Check className="w-3.5 h-3.5" />
           <span>{feedback}</span>
         </div>
       )}
 
       {!isSupported && (
-        <div className="mt-2 text-xs font-mono text-hud-gold flex items-center space-x-1.5">
+        <div className="mt-2.5 text-xs text-amber-700 flex items-center space-x-1.5">
           <AlertCircle className="w-3.5 h-3.5" />
-          <span>Navegador sem suporte nativo à Web Speech API (recomendado Chrome ou Edge).</span>
+          <span>Navegador sem suporte nativo à Web Speech API (recomendado Google Chrome ou Microsoft Edge).</span>
         </div>
       )}
     </div>
   );
 }
-

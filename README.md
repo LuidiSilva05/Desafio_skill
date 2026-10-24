@@ -1,88 +1,93 @@
-# 🛸 Quantum Financial Suite | SpaceX & NASA Telemetry Engine
+# 🏛️ Kamino Quantum | Enterprise Financial OS
 
-> **Copiloto Financeiro Pessoal de Ultra-Baixa Fricção com Telemetria Visual estilo NASA/SpaceX, Captura Multimodal (Voz, OCR, QR Code, Boletos) e Integração Open Finance.**
+> **SaaS de Gestão Financeira Enterprise de ultra-alta performance com design limpo, minimalista e elegante (padrão Kamino, Stripe, Brex e Ramp).**
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Design: Kamino / Stripe](https://img.shields.io/badge/Design-Kamino%20%7C%20Stripe-4F46E5?style=for-the-badge)](https://stripe.com)
 
 ---
 
-## 🌌 Visão Geral & Cockpit de Telemetria
+## 🎨 Design System Kamino Fintech
 
-O **Quantum Financial Suite** transforma o gerenciamento financeiro em uma rotina de no máximo **30 segundos diários**. Em vez de tabelas e planilhas cansativas, a aplicação fornece um **HUD (Heads-Up Display)** em tempo real com estética *Cyberpunk / SpaceX*:
+O **Kamino Quantum** foi construído sob uma estética corporativa contemporânea:
+- **Fundo:** Superfície suave e límpida (`#F8F9FD`).
+- **Superfícies:** Cards brancos puros (`#FFFFFF`) com bordas delicadas (`#E2E8F0`) e elevação sutil (`shadow-subtle`).
+- **Paleta de Marca:**
+  * 🟣 **Kamino Indigo (`#4F46E5`):** Destaque de marca, botões de ação e métricas centrais.
+  * 🟢 **Verde Esmeralda (`#10B981`):** Indicadores de rentabilidade, poupança e metas superadas.
+  * 🔴 **Vermelho Coral (`#EF4444`):** Alertas de estouro de teto e despesas fora do padrão.
+  * 🔘 **Slate & Marinho (`#0F172A` / `#64748B`):** Hierarquia tipográfica nítida com **Inter** e **Plus Jakarta Sans**.
+
+---
+
+## 📊 Dashboard Executivo (Executive Cockpit)
+
+Apresentação dos relatórios em tabelas e resumos executivos minimalistas:
 
 ```text
-================================================================================
-🛸 QUANTUM MISSION CONTROL | TELEMETRIA PATRIMONIAL EM TEMPO REAL
-================================================================================
-[ STATUS DO MÊS ]  [████████████░░░░░░░░] 60% Consumido | Teto de Segurança OK
-[ VALOR DA HORA ] R$ 100,00/h | Custo Diário de Sobrevivência: R$ 133,33
-[ RELÓGIO FIRE ]   Liberdade Financeira Projetada: 7 anos e 4 meses
-================================================================================
-🛡️ SOBREVIVÊNCIA : R$ 3.000 / R$ 5.000 (60%) [DENTRO DO LIMITE]
-⚡ ACELERAÇÃO    : R$ 1.500 / R$ 2.000 (75%) [ALOCAÇÃO: Tesouro IPCA / FIIs]
-🚀 VETOR FUTURO  : R$   800 / R$ 1.000 (80%) [META PROJETO: 80%]
-🎮 LAZER LIVRE   : R$   700 / R$ 1.000 (70%) [SALDO DISPONÍVEL: R$ 300]
-================================================================================
+--------------------------------------------------------------------------------
+🏛️ KAMINO FINANCIAL DASHBOARD | RESUMO EXECUTIVO
+--------------------------------------------------------------------------------
+| Métrica | Valor Atual | Meta do Mês | Status |
+| :--- | :--- | :--- | :--- |
+| 🛡️ Sobrevivência | R$ 3.200,00 | R$ 5.000,00 | 64% (Dentro do Limite) |
+| ⚡ Aceleração (Investimentos) | R$ 2.100,00 | R$ 2.000,00 | 105% (Meta Atingida) |
+| 🚀 Vetor Futuro | R$ 800,00 | R$ 1.000,00 | 80% |
+| 🎮 Lazer Livre | R$ 600,00 | R$ 1.000,00 | Saldo: R$ 400,00 |
+
+[ MENSAL ] ████████████░░░░░░░░ 60% do Orçamento Total Consumido
+--------------------------------------------------------------------------------
 ```
 
 ---
 
-## 🚀 Módulos e Tecnologias Principais
+## 🚀 Funcionalidades & Arquitetura
 
-### 1. 🎙️ Comando de Voz Hands-Free (Web Speech API)
-- Captura de áudio nativa no browser para uso veloz ou acessibilidade motora/visual.
-- Processador semântico de linguagem natural em português:
-  * Exemplo: *"Gastei 45 no almoço, 12 no Uber e 2500 de aluguel"* ➔ extração instantânea com valor, categoria e alocação automática no vetor correspondente.
+### 1. 🎙️ Captura Automatizada por Voz (Web Speech API / Whisper)
+- Processamento em linguagem natural para registro de movimentações em segundos sem tocar no teclado.
+- Reconhecimento e extração automática de valor, categoria, vetor e forma de pagamento.
 
-### 2. 📸 Visão Computacional & OCR de Cupons Fiscais (NFC-e)
-- Leitura de QR Codes de NFC-e (Nota Fiscal de Consumidor Eletrônica) emitidas pela SEFAZ.
-- Extração de itens comprados, estabelecimento, valor total e impostos.
-- Decodificador de código de barras e linhas digitáveis de Boletos Bancários (44 a 48 dígitos).
+### 2. 📸 Scanner Óptico & OCR de Documentos Fiscais
+- Câmera Web/Mobile com leitor de QR Code integrado via `html5-qrcode`.
+- Leitura e processamento de Notas Fiscais Eletrônicas ao Consumidor (**NFC-e**).
+- Decodificador de código de barras e linhas digitáveis de **Boletos Bancários** (44 a 48 dígitos).
 
 ### 3. 🏦 Conector Open Finance & Conciliação de Extratos
-- Protocolo simulado de conexão com agregadores de Open Finance (**Pluggy / Belvo**) para sincronização com Nubank, Itaú, BTG, XP, Inter e Bradesco.
-- Importador de arquivos de extrato **.OFX, .CSV e .JSON** com reconciliação bancária automática.
+- Protocolo padronizado de Open Banking inspirado em agregadores líderes (**Pluggy / Belvo**).
+- Conexão e conciliação com Nubank, Itaú, BTG Pactual, XP, Banco Inter e Bradesco.
+- Importação manual de arquivos de extrato nos formatos **.OFX, .CSV e .JSON**.
 
-### 4. 🧬 O Método Quantum-Split (4 Vetores)
-- 🛡️ **Sobrevivência (50% a 60%):** Despesas essenciais (aluguel, mercado, luz, saúde). Teto rígido com telemetria de burnrate diário.
-- ⚡ **Aceleração FIRE (mínimo 20%):** Motor de liberdade financeira (Tesouro Selic/IPCA, FIIs, Ações globais).
-- 🚀 **Vetor Futuro (10% a 15%):** Metas de médio prazo, especializações, upgrades e viagens.
-- 🎮 **Lazer Livre (10% a 15%):** Lazer sem culpa para manter a qualidade de vida.
+### 4. 🧬 Alocação Patrimonial em 4 Vetores (Quantum-Split)
+- 🛡️ **Vetor Sobrevivência (50% a 60%):** Despesas fixas e essenciais com telemetria de burn rate diário.
+- ⚡ **Vetor Aceleração FIRE (20%+):** Aportes de crescimento e multiplicação em ativos de alta liquidez, IPCA+ e FIIs.
+- 🚀 **Vetor Futuro (10% a 15%):** Metas de médio prazo, capacitação e viagens.
+- 🎮 **Vetor Lazer Livre (10% a 15%):** Orçamento fixo para qualidade de vida sem culpa.
 
-### 5. ⏱️ Relógio FIRE & Simulador de Compra Impulsiva
-- **Relógio FIRE:** Cálculo atuarial contínuo com base na regra dos 4% (25x despesas anuais) e projeções exponenciais de juros compostos.
-- **Compra Impulsiva:** *"Vale a pena comprar X por R$ Y?"* ➔ Converte o valor em **horas de trabalho** necessárias para pagar o item e simula quanto esse montante renderia em **1, 5 e 10 anos** se aportado no Vetor Aceleração.
+### 5. ⏱️ Calculadora de Custo de Oportunidade & Relógio FIRE
+- **Valor da Hora de Trabalho:** Cálculo da taxa horária com base na renda líquida total e horas dedicadas no mês.
+- **Simulador de Compra:** Conversão de qualquer item em horas de vida e projeção com juros compostos em 1, 5 e 10 anos.
+- **Auditoria de Assinaturas:** Detecção proativa de serviços recorrentes e microvazamentos.
 
 ---
 
 ## 🛠️ Como Executar Localmente
 
-### Pré-requisitos
-- **Node.js 18+** instalado.
-- **npm** ou **yarn**.
-
-### 1. Clonar o Repositório
+### 1. Clonar e Instalar
 ```bash
 git clone https://github.com/LuidiSilva05/Desafio_skill.git
 cd Desafio_skill
-```
-
-### 2. Instalar Dependências
-```bash
 npm install
 ```
 
-### 3. Iniciar o Servidor de Desenvolvimento
+### 2. Executar em Modo de Desenvolvimento
 ```bash
 npm run dev
 ```
-
 Acesse [http://localhost:3000](http://localhost:3000) no seu navegador.
 
-### 4. Compilar para Produção
+### 3. Build de Produção
 ```bash
 npm run build
 npm run start
@@ -90,46 +95,43 @@ npm run start
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Estrutura de Arquivos
 
 ```
 quantum-financial-suite/
 ├── src/
 │   ├── app/
-│   │   ├── globals.css             # Estilos Cyberpunk, Scanlines e Grid SpaceX
-│   │   ├── layout.tsx              # Root Layout com fontes e Provider
-│   │   ├── page.tsx                # Dashboard Principal de Telemetria
+│   │   ├── globals.css             # Estilo Kamino/Stripe (#F8F9FD, cards brancos)
+│   │   ├── layout.tsx              # Tipografia Inter e Plus Jakarta Sans
+│   │   ├── page.tsx                # Dashboard Executivo Principal
 │   │   └── settings/
-│   │       └── page.tsx            # Calibração 100% Customizável campo por campo
+│   │       └── page.tsx            # Calibração 100% Customizável
 │   ├── components/
-│   │   ├── HeaderHUD.tsx           # Barra superior com relógio UTC e atalhos
-│   │   ├── TelemetryGauges.tsx     # Medidores de status, hora de vida e burnrate
-│   │   ├── VectorsProgress.tsx     # Barras dinâmicas do Quantum-Split
-│   │   ├── FireClock.tsx           # Contagem regressiva FIRE e juros compostos
-│   │   ├── VoiceCommander.tsx      # Web Speech API hands-free
-│   │   ├── ScannerModal.tsx        # Câmera QR Code, Boleto e OCR NFC-e
-│   │   ├── OpenFinanceModal.tsx    # APIs bancárias e importador OFX/CSV
-│   │   ├── ImpulseCalculator.tsx   # Simulador de decisão de compra
-│   │   ├── LeakDetector.tsx        # Detecção de assinaturas e microvazamentos
-│   │   └── TransactionList.tsx     # Feed de transações e input 30s
+│   │   ├── HeaderHUD.tsx           # Navbar institucional Kamino
+│   │   ├── TelemetryGauges.tsx     # Métricas executivas e burn rate
+│   │   ├── VectorsProgress.tsx     # Cartões de alocação dos 4 Vetores
+│   │   ├── FireClock.tsx           # Projeção FIRE e juros compostos
+│   │   ├── VoiceCommander.tsx      # Entrada de dados hands-free por voz
+│   │   ├── ScannerModal.tsx        # Câmera QR Code, Boletos e OCR NFC-e
+│   │   ├── OpenFinanceModal.tsx    # Open Finance Pluggy/Belvo e upload OFX/CSV
+│   │   ├── ImpulseCalculator.tsx   # Custo de oportunidade e horas de trabalho
+│   │   ├── LeakDetector.tsx        # Auditoria de assinaturas recorrentes
+│   │   └── TransactionList.tsx     # Ledger consolidado e input rápido
 │   ├── context/
-│   │   └── FinancialContext.tsx    # Estado global e persistência LocalStorage
+│   │   └── FinancialContext.tsx    # Gerenciador de estado e persistência local
 │   └── types/
 │       └── financial.ts            # Tipagens TypeScript completas
-├── skills/                         # Antigravity Skills integradas
-├── .antigravityrules               # Diretrizes do Copiloto no Workspace
-├── package.json
-├── tailwind.config.ts
-└── tsconfig.json
+├── tailwind.config.ts              # Paleta Kamino Indigo (#4F46E5) e sombras sutis
+└── package.json
 ```
 
 ---
 
-## 🔒 Privacidade e Criptografia
-- Todos os dados financeiros são armazenados localmente no navegador via `localStorage`.
-- Nenhuma informação privada é transmitida para servidores de terceiros.
+## 🔒 Privacidade
+- Arquitetura **Client-Side First**: todos os dados são persistidos no navegador do usuário (`localStorage`).
+- Nenhuma informação financeira é repassada a servidores externos não autorizados.
 
 ---
 
 ## ⚠️ Ressalva Legal
-> As projeções matemáticas, simulações e diagnósticos apresentados nesta suíte têm finalidade estritamente educativa e de auxílio à organização financeira pessoal, não constituindo recomendação de investimento. Decisões de investimento de maior porte merecem a avaliação de um profissional certificado (CEA/CFP).
+> As projeções, diagnósticos e simulações gerados por esta plataforma têm caráter estritamente educativo e informativo, não constituindo recomendação de investimento ou consultoria financeira regulada.

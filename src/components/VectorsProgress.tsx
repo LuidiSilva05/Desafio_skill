@@ -25,169 +25,156 @@ export function VectorsProgress() {
   const vectors = [
     {
       key: "sobrevivencia" as VectorKey,
-      name: "SOBREVIVÊNCIA",
-      emoji: "🛡️",
-      icon: Shield,
+      name: "Vetor Sobrevivência",
+      tag: "50-60% Teto",
       pctTarget: settings.vectorPercentages.sobrevivencia,
       spent: vectorSpent.sobrevivencia,
       targetAmount: totalIncome * (settings.vectorPercentages.sobrevivencia / 100),
-      color: "#00f5ff",
-      bgBar: "bg-hud-cyan",
-      textColor: "text-hud-cyan",
-      borderColor: "border-hud-cyan/30",
-      description: "Moradia, contas básicas, mercado e saúde. Teto seguro.",
-      isCap: true, // It's a ceiling
+      barColor: "bg-slate-700",
+      badgeColor: "bg-slate-100 text-slate-800 border-slate-200",
+      description: "Moradia, contas essenciais, supermercado e saúde.",
+      isCap: true,
     },
     {
       key: "aceleracao" as VectorKey,
-      name: "ACELERAÇÃO FIRE",
-      emoji: "⚡",
-      icon: Zap,
+      name: "Vetor Aceleração FIRE",
+      tag: "20%+ Mínimo",
       pctTarget: settings.vectorPercentages.aceleracao,
       spent: vectorSpent.aceleracao,
       targetAmount: totalIncome * (settings.vectorPercentages.aceleracao / 100),
-      color: "#39ff14",
-      bgBar: "bg-hud-green",
-      textColor: "text-hud-green",
-      borderColor: "border-hud-green/30",
+      barColor: "bg-emerald-600",
+      badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
       description: "Tesouro Selic/IPCA, Ações, FIIs e Ativos Globais.",
-      isCap: false, // It's a minimum goal
+      isCap: false,
     },
     {
       key: "futuro" as VectorKey,
-      name: "VETOR FUTURO",
-      emoji: "🚀",
-      icon: Rocket,
+      name: "Vetor Futuro",
+      tag: "10-15% Meta",
       pctTarget: settings.vectorPercentages.futuro,
       spent: vectorSpent.futuro,
       targetAmount: totalIncome * (settings.vectorPercentages.futuro / 100),
-      color: "#bf5af2",
-      bgBar: "bg-hud-purple",
-      textColor: "text-hud-purple",
-      borderColor: "border-hud-purple/30",
-      description: "Projetos pessoais, viagens, especializações e reservas.",
+      barColor: "bg-kamino-600",
+      badgeColor: "bg-indigo-50 text-kamino-700 border-indigo-200",
+      description: "Projetos de médio prazo, especializações e viagens.",
       isCap: false,
     },
     {
       key: "lazer" as VectorKey,
-      name: "LAZER LIVRE",
-      emoji: "🎮",
-      icon: Gamepad2,
+      name: "Vetor Lazer Livre",
+      tag: "10-15% Fixo",
       pctTarget: settings.vectorPercentages.lazer,
       spent: vectorSpent.lazer,
       targetAmount: totalIncome * (settings.vectorPercentages.lazer / 100),
-      color: "#ffd700",
-      bgBar: "bg-hud-gold",
-      textColor: "text-hud-gold",
-      borderColor: "border-hud-gold/30",
-      description: "Gastos sem culpa para manter alta qualidade de vida diária.",
+      barColor: "bg-amber-500",
+      badgeColor: "bg-amber-50 text-amber-700 border-amber-200",
+      description: "Lazer sem culpa para manter a qualidade de vida diária.",
       isCap: true,
     },
   ];
 
   return (
-    <div className="hud-box rounded-xl p-5 border border-cyan-500/30">
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800">
+    <div className="kamino-card p-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
         <div>
-          <h2 className="font-orbitron font-bold text-sm tracking-widest text-hud-cyan flex items-center gap-2">
-            <span>🧬 MÉTODO QUANTUM-SPLIT</span>
-            <span className="text-slate-400 font-mono text-xs font-normal">
-              | TELEMETRIA DOS 4 VETORES
+          <div className="flex items-center space-x-2">
+            <h2 className="font-heading font-bold text-base text-navy-900">
+              Método Quantum-Split
+            </h2>
+            <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+              Alocação em 4 Vetores
             </span>
-          </h2>
-          <p className="text-xs font-mono text-slate-400 mt-0.5">
-            Distribuição matemática para multiplicar patrimônio sem perder o presente.
+          </div>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Distribuição matemática de capital para equilibrar crescimento patrimonial e qualidade de vida.
           </p>
         </div>
-        <div className="flex items-center gap-2 text-[11px] font-mono text-slate-400">
-          <span className="inline-block w-2 h-2 rounded-full bg-hud-cyan animate-pulse"></span>
-          <span>CALIBRADO EM 100% DA RENDA TOTAL</span>
+        <div className="text-xs font-medium text-slate-500">
+          Orçamento Calibrado: <span className="font-semibold text-navy-900">R$ {totalIncome.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {vectors.map((vec) => {
-          const Icon = vec.icon;
           const consumptionPct =
             vec.targetAmount > 0 ? (vec.spent / vec.targetAmount) * 100 : 0;
           const remaining = vec.targetAmount - vec.spent;
 
-          let statusTag = "NOMINAL";
-          let statusStyle = "bg-slate-800 text-slate-300 border-slate-700";
+          let statusBadge = "Dentro do Limite";
+          let badgeStyle = "bg-slate-100 text-slate-700 border-slate-200";
 
           if (vec.isCap) {
             if (consumptionPct > 100) {
-              statusTag = "ESTOURADO";
-              statusStyle = "bg-hud-magenta/20 text-hud-magenta border-hud-magenta/40";
+              statusBadge = "Acima do Teto";
+              badgeStyle = "bg-red-50 text-red-700 border-red-200";
             } else if (consumptionPct > 80) {
-              statusTag = "ALERTA TETO";
-              statusStyle = "bg-hud-gold/20 text-hud-gold border-hud-gold/40";
+              statusBadge = "Atenção ao Teto";
+              badgeStyle = "bg-amber-50 text-amber-700 border-amber-200";
             } else {
-              statusTag = "DENTRO DO LIMITE";
-              statusStyle = "bg-hud-cyan/20 text-hud-cyan border-hud-cyan/40";
+              statusBadge = "Dentro do Limite";
+              badgeStyle = "bg-emerald-50 text-emerald-700 border-emerald-200";
             }
           } else {
             if (consumptionPct >= 100) {
-              statusTag = "META SUPERADA 🚀";
-              statusStyle = "bg-hud-green/20 text-hud-green border-hud-green/40";
+              statusBadge = "Meta Atingida";
+              badgeStyle = "bg-emerald-50 text-emerald-700 border-emerald-200";
             } else {
-              statusTag = `APORTADO ${consumptionPct.toFixed(0)}%`;
-              statusStyle = "bg-purple-900/30 text-hud-purple border-purple-500/40";
+              statusBadge = `${consumptionPct.toFixed(0)}% Aportado`;
+              badgeStyle = "bg-indigo-50 text-kamino-700 border-indigo-200";
             }
           }
 
           return (
             <div
               key={vec.key}
-              className="p-4 rounded-lg bg-space-900/80 border border-slate-800/90 hover:border-slate-700 transition-all flex flex-col justify-between"
+              className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 hover:bg-white hover:border-slate-300 transition-all flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center space-x-2">
-                    <span className="text-lg">{vec.emoji}</span>
-                    <span className={`font-orbitron font-bold text-xs ${vec.textColor}`}>
+                    <span className="font-heading font-semibold text-sm text-navy-900">
                       {vec.name}
                     </span>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-space-850 text-slate-400 border border-slate-800">
+                    <span className="text-[11px] font-medium text-slate-500 px-1.5 py-0.5 rounded bg-white border border-slate-200">
                       {vec.pctTarget}%
                     </span>
                   </div>
-                  <span className={`text-[10px] font-mono px-2 py-0.5 rounded border uppercase font-semibold ${statusStyle}`}>
-                    {statusTag}
+                  <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border ${badgeStyle}`}>
+                    {statusBadge}
                   </span>
                 </div>
 
-                <div className="flex items-baseline justify-between mt-3">
-                  <div className="font-orbitron text-xl font-bold text-white">
+                <div className="flex items-baseline justify-between mt-2">
+                  <div className="font-heading text-xl font-bold text-navy-900">
                     R$ {vec.spent.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                   </div>
-                  <div className="text-xs font-mono text-slate-400">
+                  <div className="text-xs text-slate-500 font-medium">
                     / R$ {vec.targetAmount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                   </div>
                 </div>
 
                 {/* Progress Bar */}
-                <div className="w-full bg-space-950 h-2.5 rounded-full overflow-hidden mt-2.5 border border-slate-800/80 relative">
+                <div className="w-full bg-slate-200/70 h-2 rounded-full overflow-hidden mt-3">
                   <div
-                    className={`h-full ${vec.bgBar} transition-all duration-700`}
+                    className={`h-full rounded-full ${vec.barColor} transition-all duration-500`}
                     style={{ width: `${Math.min(100, consumptionPct)}%` }}
                   />
                 </div>
 
-                <div className="flex justify-between text-[11px] font-mono mt-2 text-slate-400">
-                  <span>Progresso: {consumptionPct.toFixed(1)}%</span>
+                <div className="flex justify-between text-[11px] text-slate-500 mt-2 font-medium">
+                  <span>Consumido: {consumptionPct.toFixed(1)}%</span>
                   <span>
                     {vec.isCap
                       ? remaining >= 0
-                        ? `Margem livre: R$ ${remaining.toFixed(2)}`
+                        ? `Saldo Livre: R$ ${remaining.toFixed(2)}`
                         : `Excesso: R$ ${Math.abs(remaining).toFixed(2)}`
-                      : `Faltam: R$ ${Math.max(0, remaining).toFixed(2)}`}
+                      : `Aportar restante: R$ ${Math.max(0, remaining).toFixed(2)}`}
                   </span>
                 </div>
               </div>
 
-              <div className="mt-3 pt-2 border-t border-slate-800/50 text-[11px] font-mono text-slate-400 flex items-center gap-1.5">
-                <Info className="w-3 h-3 text-slate-400" />
+              <div className="mt-3.5 pt-2.5 border-t border-slate-200/60 text-[11px] text-slate-500 flex items-center space-x-1.5">
+                <Info className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
                 <span className="truncate">{vec.description}</span>
               </div>
             </div>
@@ -197,4 +184,3 @@ export function VectorsProgress() {
     </div>
   );
 }
-

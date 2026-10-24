@@ -294,3 +294,4 @@ export function ScannerModal({ isOpen, onClose }: ScannerModalProps) {
     </div>
   );
 }
+

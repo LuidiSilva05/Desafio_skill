@@ -151,3 +151,4 @@ export function OpenFinanceModal({ isOpen, onClose }: OpenFinanceModalProps) {
     </div>
   );
 }
+

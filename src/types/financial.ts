@@ -50,3 +50,4 @@ export interface ImpulseAnalysis {
   projection10y: number;
   verdict: 'AUTORIZADO' | 'ATENCAO_IMPACTO' | 'CRITICO';
 }
+

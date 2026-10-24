@@ -86,3 +86,4 @@ export function HeaderHUD({ onOpenScanner, onOpenOpenFinance }: HeaderHUDProps) 
     </header>
   );
 }
+
